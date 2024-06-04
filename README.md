@@ -1,4 +1,4 @@
-## OCR sample program with m3, macOS 14.5, Python 3.10.14
+## Number recoginition sample program with m3, macOS 14.5, Python 3.10.14
 
 ### 簡易版 (number_recog.py をターミナルで実行する)
 
