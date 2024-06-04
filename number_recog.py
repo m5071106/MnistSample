@@ -65,7 +65,13 @@ def predict_number():
             # 2値化
             threshold = 140
             img = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)[1]
+            # 画像の短い方の辺の長さを取得
+            shortest_side = min(img.shape[0], img.shape[1])
+            # 正方形に変換
+            img = cv2.resize(img, (shortest_side, shortest_side))
+            # 一時フォルダへ書き出し
             cv2.imwrite(temporary_dir + "/" + filename, img)
+
             # 画像読込
             image = pilimg.open(temporary_dir + "/" + filename).convert('L')
             image = PIL.ImageOps.invert(image)
@@ -78,27 +84,16 @@ def predict_number():
             # 数字予測結果
             with torch.no_grad():
                 output = model(image)
-
-                output_sum = torch.sum(output)
-                output2 = output * 100 / output_sum
-
                 prediction = output.argmax(dim=1, keepdim=True)
                 result = prediction.item()
 
-                if resultfilename[0] == str(result):
-                    print(result, "o", output)
-                else:
-                    print(result, "x", output)
-                print("--------------------")
-
-                # prediction = output2.argmin(dim=1, keepdim=True)
-                # result = prediction.item()
-
+                # Debug (Evaluate the result)
                 # if resultfilename[0] == str(result):
-                #     print(result, "o", output2)
+                #     print(result, "o", output)
                 # else:
-                #     print(result, "x", output2)
+                #     print(result, "x", output)
                 # print("--------------------")
+
             # 処理したファイルをバックアップディレクトリに移動
             os.rename(f'{source_dir}/{filename}', f'{backup_dir}/{filename}')
             # バックアップディレクトリに移動したファイルに年月日時分秒をつけてリネーム
