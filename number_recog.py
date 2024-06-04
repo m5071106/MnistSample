@@ -78,8 +78,27 @@ def predict_number():
             # 数字予測結果
             with torch.no_grad():
                 output = model(image)
+
+                output_sum = torch.sum(output)
+                output2 = output * 100 / output_sum
+
                 prediction = output.argmax(dim=1, keepdim=True)
                 result = prediction.item()
+
+                if resultfilename[0] == str(result):
+                    print(result, "o", output)
+                else:
+                    print(result, "x", output)
+                print("--------------------")
+
+                # prediction = output2.argmin(dim=1, keepdim=True)
+                # result = prediction.item()
+
+                # if resultfilename[0] == str(result):
+                #     print(result, "o", output2)
+                # else:
+                #     print(result, "x", output2)
+                # print("--------------------")
             # 処理したファイルをバックアップディレクトリに移動
             os.rename(f'{source_dir}/{filename}', f'{backup_dir}/{filename}')
             # バックアップディレクトリに移動したファイルに年月日時分秒をつけてリネーム

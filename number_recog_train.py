@@ -23,15 +23,15 @@ train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, d
 test_dataset = datasets.MNIST(root='./data', train=False, transform=transform)
 
 # DataLoaderの作成
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=False)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=False)
 
 # モデルのインスタンス化
 model = Net()
 
 # ハイパーパラメータの設定
 learning_rate = 0.01
-epochs = 10
+epochs = 20
 
 # 損失関数と最適化アルゴリズムの定義
 criterion = nn.CrossEntropyLoss()
