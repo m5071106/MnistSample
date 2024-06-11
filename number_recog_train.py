@@ -22,20 +22,21 @@ transform = transforms.Compose([
 train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
 test_dataset = datasets.MNIST(root='./data', train=False, transform=transform)
 
-# DataLoaderの作成
-train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=128, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=128, shuffle=False)
+# DataLoaderの作成 batch_size の値変更で学習を調整する 128, 64, 32 など
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)
+test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=False)
 
 # モデルのインスタンス化
 model = Net()
 
-# ハイパーパラメータの設定
+# ハイパーパラメータの設定 学習率(0.01 や 0.1 などで調整)とエポック数(10, 20, 30などで調整)
 learning_rate = 0.01
-epochs = 20
+epochs = 30
 
 # 損失関数と最適化アルゴリズムの定義
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+# 最適化アルゴリズムの種類: Adam, SGD, Adagrad, RMSprop, Adadelta など
+optimizer = optim.Adagrad(model.parameters(), lr=learning_rate)
 
 # 学習ループ
 for epoch in range(epochs):

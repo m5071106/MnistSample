@@ -12,6 +12,8 @@ import torch.nn as nn
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
+from pathlib import Path
+
 from Net import Net
 
 # データの前処理
@@ -35,8 +37,8 @@ def predict_number():
         extensions = file.read().splitlines()
 
     # 入出力ディレクトリのパス
-    source_dir = './source'
-    result_dir = './result'
+    source_dir = Path('./source.txt').read_text().strip()
+    result_dir = Path('./result.txt').read_text().strip()
     backup_dir = './backup'
     temporary_dir = './temporary'
     # sourceディレクトリ内のファイル一覧を取得
@@ -57,7 +59,7 @@ def predict_number():
             for extension in extensions:
                 converted_filename = converted_filename.replace('.' + extension, '')
             # 変換後のファイル名
-            resultfilename = f'{converted_filename}_{datetimenow}.txt'
+            resultfilename = f'{converted_filename}.txt'
             # 入力
             img = cv2.imread(source_dir + "/" + filename)
             # グレースケール
@@ -86,13 +88,6 @@ def predict_number():
                 output = model(image)
                 prediction = output.argmax(dim=1, keepdim=True)
                 result = prediction.item()
-
-                # Debug (Evaluate the result)
-                # if resultfilename[0] == str(result):
-                #     print(result, "o", output)
-                # else:
-                #     print(result, "x", output)
-                # print("--------------------")
 
             # 処理したファイルをバックアップディレクトリに移動
             os.rename(f'{source_dir}/{filename}', f'{backup_dir}/{filename}')
